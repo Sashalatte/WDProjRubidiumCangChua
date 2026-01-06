@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ClickHub — Choose Your Grid</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="../assets/Clickhub-logo-1.png">
+</head>
   <style>
 
     body{
@@ -40,11 +42,15 @@
       display: block;
     }
 
+    h1,  {
+      margin-bottom: 80px;
+      margin-top: -10px;
+    }
+     
   </style>
-</head>
 
 <body>
-  <div class="page-background" style="background-image: url('background-grid.png');"></div>
+  <div class="page-background" style="background-image: url('../assets/background-grid.png');"></div>
 
   <header>
     <nav>
@@ -59,17 +65,16 @@
 
   <div class="overlay">
     <h1>Choose Your Grid</h1>
-    <p>Select a layout below:</p>
 
     <div class="grid-options">
       <div class="grid-option" onclick="chooseGrid('1x1')">
-        <img src="grid-4x1.png" alt="1x1 Grid">
+        <img src="../assets/grid-4x1.png" alt="1x1 Grid">
       </div>
       <div class="grid-option" onclick="chooseGrid('2x2')">
-        <img src="grid-2x2.png" alt="2x2 Grid">
+        <img src="../assets/grid-2x2.png" alt="2x2 Grid">
       </div>
       <div class="grid-option" onclick="chooseGrid('4x2')">
-        <img src="grid-4x2.png" alt="4x2 Grid">
+        <img src="../assets/grid-4x2.png" alt="4x2 Grid">
       </div>
     </div>
   </div>
