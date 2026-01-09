@@ -3,12 +3,12 @@
 ## Clickhub
 ## Features
    * Works on both phone and laptop
-   * Working download button for photos
+   * Working download feature for photos
    * Multiple filters available during editing
 
 ## Details
-   * We will use html forms or ... and save it to the local storage
-   * We will show the data we collect on
+   * We will use html forms or JavaScript to collect user input and save it to the local storage
+   * We will show the data we collect on a results page in the website
    * We will access the camera of the user's device
    * We will access the photo gallery of the user
 
