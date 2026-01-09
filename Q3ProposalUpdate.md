@@ -3,8 +3,8 @@
 ## Clickhub
 ## Features
    * Works on both phone and laptop
-   * 2nd feature
-   * 3rd feature
+   * Working download button for photos
+   * Multiple filters available during editing
 
 ## Details
    * We will use html forms or ... and save it to the local storage
