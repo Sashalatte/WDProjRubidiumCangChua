@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ClickHub — Download</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="../assets/Clickhub-logo-1.png">
-</head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClickHub — Download</title>
+
 <style>
-  body { margin: 0; font-family: Arial; text-align: center; }
+  body { margin: 0; font-family: Arial; }
 
   .page-background {
     position: fixed;
@@ -22,36 +20,66 @@
     z-index: 1;
   }
 
-  h1 { margin-top: 20px; color: #fff; text-shadow: 1px 1px 3px #000; }
+  header {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+  }
+
+  header nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 12px 0;
+  }
+
+  header nav a {
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  .main-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 210px;
+    gap: 40px;
+    position: relative;
+    z-index: 2;
+  }
 
   #photobooth-frame {
-    display: inline-block;
-    margin-top: 30px;
-    background: #fff;
-    padding: 10px;
-    border: 4px solid #333;
-    z-index: 2;
-    position: relative;
+    display: grid;
+    gap: 8px;
+    width: 130px;
+    padding: 12px;
+    background: black;
+    border: 2px solid #222;
   }
 
   .photo {
-    margin: 5px 0;
+    width: 100px;
+    height: 80px;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
   }
-
-  .layout-2x2 { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 150px; grid-gap: 5px; }
-  .layout-4x1 { display: grid; grid-template-columns: 1fr; grid-auto-rows: 150px; grid-gap: 5px; }
-  .layout-4x2 { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 150px; grid-gap: 5px; }
 
   #downloadBtn {
-    margin-top: 20px;
     padding: 12px 24px;
-    font-size: 20px;
+    font-size: 16px;
     cursor: pointer;
-    z-index: 2;
-    position: relative;
+    background: transparent;
+    border: 2px solid black;
+    color: black;
   }
 </style>
+</head>
+
 <body>
+  <div class="page-background"></div>
 
   <header>
     <nav>
@@ -64,70 +92,48 @@
     </nav>
   </header>
 
-</head>
-<body>
-
-<div class="page-background"></div>
-
-<h1>Your Photobooth Strip</h1>
-
-<div id="photobooth-frame"></div>
-
-<button id="downloadBtn">Download Strip</button>
+  <div class="main-container">
+    <div id="photobooth-frame"></div>
+    <button id="downloadBtn">Download Strip</button>
+  </div>
 
 <script>
-let photos = JSON.parse(localStorage.getItem("boothPhotos") || "[]");
-let layout = localStorage.getItem("selectedGrid") || "2x2";
-
+const photos = JSON.parse(localStorage.getItem("boothPhotos") || "[]");
 const frame = document.getElementById("photobooth-frame");
-frame.className = ""; 
-if (layout === "2x2") frame.classList.add("layout-2x2");
-if (layout === "4x1") frame.classList.add("layout-4x1");
-if (layout === "4x2") frame.classList.add("layout-4x2");
 
 photos.forEach(src => {
   const img = document.createElement("img");
   img.src = src;
   img.className = "photo";
-  img.width = 200;
-  img.height = 150;
   frame.appendChild(img);
 });
 
 document.getElementById("downloadBtn").addEventListener("click", () => {
-  let cols = 1, rows = 1;
-  if (layout === "2x2") { cols = 2; rows = 2; }
-  if (layout === "4x1") { cols = 1; rows = 4; }
-  if (layout === "4x2") { cols = 2; rows = 4; }
-
-  const photoWidth = 200;
-  const photoHeight = 150;
-  const gap = 5;
-  const width = cols * photoWidth + (cols-1)*gap;
-  const height = rows * photoHeight + (rows-1)*gap;
-
+  const width = 130;
+  const height = photos.length * 80 + (photos.length - 1) * 8 + 24;
   const canvas = document.createElement("canvas");
   canvas.width = width;
   canvas.height = height;
   const ctx = canvas.getContext("2d");
 
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, width, height);
+
+  let loaded = 0;
+
   photos.forEach((src, i) => {
-    let col = i % cols;
-    let row = Math.floor(i / cols);
     const img = new Image();
     img.src = src;
-    img.onload = (() => {
-      return function() {
-        ctx.drawImage(img, col*(photoWidth+gap), row*(photoHeight+gap), photoWidth, photoHeight);
-
-        if (i === photos.length - 1) {
-          const link = document.createElement("a");
-          link.download = "photobooth_strip.png";
-          link.href = canvas.toDataURL();
-          link.click();
-        }
+    img.onload = () => {
+      ctx.drawImage(img, (width - 100) / 2, i * (80 + 8) + 12, 100, 80);
+      loaded++;
+      if (loaded === photos.length) {
+        const link = document.createElement("a");
+        link.download = "photobooth_strip.png";
+        link.href = canvas.toDataURL();
+        link.click();
       }
-    })();
+    };
   });
 });
 </script>
