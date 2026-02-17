@@ -69,7 +69,8 @@
 </head>
 
 <body>
-  <div class="page-background"></div>
+  <div class="page-background" style="background-image: url('../assets/background-booth.png');"></div>
+
   <header>
     <nav>
       <a href="home.html">Home</a>
@@ -102,94 +103,5 @@
 
     <canvas id="canvas" style="display:none;"></canvas>
   </div>
-
-<script>
-const video = document.getElementById("video");
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-const countdown = document.getElementById("countdown");
-const frameCount = document.getElementById("frameCount");
-
-let active = false;
-let totalFrames = 0;
-let currentFrame = 0;
-let photos = [];
-
-navigator.mediaDevices.getUserMedia({ video: true })
-  .then(stream => video.srcObject = stream)
-  .catch(() => alert("Camera not working"));
-
-function getLayoutFrames() {
-  let layout = localStorage.getItem("selectedGrid");
-  if (!layout) layout = "2x2";
-
-  if (layout === "2x2") return 4;
-  if (layout === "4x1") return 4;
-  if (layout === "4x2") return 8;
-
-  return 4;
-}
-
-function startBooth() {
-  if (active) return;
-  active = true;
-
-  currentFrame = 0;
-  photos = [];
-
-  const timer = parseInt(document.getElementById("timer").value);
-  totalFrames = getLayoutFrames();
-  frameCount.textContent = `Photo 0 / ${totalFrames}`;
-
-  const takePhoto = () => {
-    if (!active) return;
-
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    ctx.drawImage(video, 0, 0);
-
-    photos.push(canvas.toDataURL("image/png")); 
-
-    currentFrame++;
-    frameCount.textContent = `Photo ${currentFrame} / ${totalFrames}`;
-
-    if (currentFrame < totalFrames) {
-      startCountdown(timer, takePhoto);
-    } else {
-      countdown.textContent = "Done!";
-      active = false;
-      localStorage.setItem("boothPhotos", JSON.stringify(photos));
-      document.getElementById("nextBtn").style.display = "inline-block";
-    }
-  };
-
-  startCountdown(timer, takePhoto);
-}
-
-function startCountdown(seconds, callback) {
-  let time = seconds;
-  countdown.textContent = time;
-
-  const interval = setInterval(() => {
-    if (!active) {
-      clearInterval(interval);
-      return;
-    }
-
-    time--;
-    countdown.textContent = time > 0 ? time : "📸";
-
-    if (time === 0) {
-      clearInterval(interval);
-      callback();
-    }
-  }, 1000);
-}
-
-function goToDownload() {
-  window.location.href = "download.html"; 
-}
-</script>
-
 </body>
-</html> 
+</html>
