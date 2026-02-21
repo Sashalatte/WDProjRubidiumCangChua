@@ -42,18 +42,19 @@ nav {
 
   header nav {
     display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 12px 0;
+    justify-content: space-evenly;
+    gap: 100px;
+    padding: 10px 20px;
+    text-decoration: none;
+    top: 250px;
+    font-size: 5rem;
   }
 
   header nav a {
     color: white;
     text-decoration: none;
-    font-size: 1.2rem;
-    position: relative;
-    top: 25px;
-    
+    color: black;
+    font-weight: bold;
   }
 
   .main-container {
@@ -92,6 +93,35 @@ nav {
     border: 2px solid black;
     color: black;
   }
+
+@media (max-width: 768px) {
+
+ header nav {
+    gap: 15px;
+    padding: 10px 10px;
+    font-size: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+ header nav a {
+    font-size: 0.9rem;
+    top: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+ header nav {
+    gap: 10px;
+    padding: 8px 5px;
+  }
+
+ header nav a {
+    font-size: 0.75rem;
+    top: 25px;
+  }
+}
+  
 </style>
 </head>
 
