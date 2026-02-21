@@ -1,82 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ClickHub — Edit</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="../assets/Clickhub-logo-1.png">
-</head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ClickHub — Edit</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="../assets/Clickhub-logo-1.png">
+
 <style>
-  .overlay{
-    margin-left: 400px;
-  }
+body { margin: 0; font-family: Arial; }
 
-  button {
-    font-size: 20px;
-    padding: 10px 20px;
-    cursor: pointer;
-  }
-  
-  @media (max-width: 768px) {
-    .overlay{
-      margin-left: 0;
-      padding: 15px;
-      text-align: center;
-    }
+.page-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../assets/background-edit.png');
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+}
 
-    button {
-      font-size: 16px;
-      width: 100%;
-      max-width: 300px;
-    }
+header {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+}
 
-    h1 {
-      font-size: 24px;
-    }
-    
-    p {
-      font-size: 14px;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    button {
-      font-size: 14px;
-      padding: 8px 15px;
-    }
-    
-    h1 {
-      font-size: 20px;
-    }
-    
-    p {
-      font-size: 12px;
-    }
-  }
+.overlay {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+}
+
+#strip {
+  position: absolute;
+  top: 160px;
+  left: 30%;
+  transform: translateX(-50%);
+  display: grid;
+  gap: 8px;
+  background: rgb(0, 0, 0);
+  padding: 12px;
+  border: 3px solid rgb(0, 0, 0);
+}
+
+.photo-frame {
+  width: 110px;
+  height: 110px;
+  background: white;
+  border: 3px solid rgb(0, 0, 0);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.controls {
+  position: absolute;
+  top: 180px;
+  left: 75%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.cycle-btn {
+  font-size: 16px;
+  padding: 10px 18px;
+  cursor: pointer;
+}
 </style>
+</head>
+
 <body>
-  <div class="page-background" style="background-image: url('../assets/background-edit.png');"></div>
+<div class="page-background"></div>
 
-  <header>
-    <nav>
-      <a href="home.html">Home</a>
-      <a href="grid.html">Grid</a>
-      <a href="booth.html">Booth</a>
-      <a href="edit.html">Edit</a>
-      <a href="download.html">Download</a>
-      <a href="about.html">About</a>
-    </nav>
-  </header>
+<header>
+<nav>
+<a href="home.html">Home</a>
+<a href="grid.html">Grid</a>
+<a href="booth.html">Booth</a>
+<a href="edit.html">Edit</a>
+<a href="download.html">Download</a>
+<a href="about.html">About</a>
+</nav>
+</header>
 
-  <div class="overlay">
-    <h1>Edit Your Photo</h1>
-    <p>Apply simple effects below.</p>
-  <div style="display:flex; flex-direction:column; align-items:center; gap:10px;">
-      <button onclick="alert('Brightness adjusted!')">Brightness</button>
-      <button onclick="alert('Contrast applied!')">Contrast</button>
-      <button onclick="alert('Filters added!')">Filter</button>
-    </div>
-  </div>
+<div class="overlay">
+
+<div id="strip"></div>
+
+<div class="controls">
+<button id="brightnessBtn" class="cycle-btn">Brightness: Normal</button>
+<button id="colorBtn" class="cycle-btn">Color: Normal</button>
+<button id="frameBtn" class="cycle-btn">Frame Color: Default</button>
+</div>
+
+</div>
+
+<script>
+const strip = document.getElementById("strip")
+
+let photos = JSON.parse(localStorage.getItem("capturedPhotos") || "[]")
+
+if (photos.length === 0) {
+  photos = [
+    "../assets/sample1.png",
+    "../assets/sample2.png",
+    "../assets/sample3.png",
+    "../assets/sample4.png"
+  ]
+}
+
+strip.style.gridTemplateColumns = "repeat(2,1fr)"
+
+photos.forEach(src => {
+  const frame = document.createElement("div")
+  frame.className = "photo-frame"
+
+  const img = document.createElement("img")
+  img.src = src
+
+  frame.appendChild(img)
+  strip.appendChild(frame)
+})
+
+const brightnessOptions = [
+  {name:"Darker", value:0.7},
+  {name:"Lighter", value:1.3},
+  {name:"Normal", value:1}
+]
+
+const colorOptions = [
+  {name:"Cool Tone", css:"contrast(115%) saturate(140%) hue-rotate(190deg)"},
+  {name:"Sepia", css:"sepia(100%)"},
+  {name:"Vintage", css:"contrast(90%) saturate(80%) sepia(40%)"},
+  {name:"Normal", css:""}
+]
+
+const frameColors = [
+  {name:"Pink", inside:"#FFB3BA"},
+  {name:"Mint", inside:"#BAFFC9"},
+  {name:"Blue", inside:"#BAE1FF"},
+  {name:"Yellow", inside:"#FFFFBA"},
+  {name:"Black", inside:"#000000"},
+  {name:"White", inside:"#FFFFFF"}
+]
+
+let bIndex = 2
+let cIndex = 3
+let fIndex = -1
+
+const brightnessBtn = document.getElementById("brightnessBtn")
+const colorBtn = document.getElementById("colorBtn")
+const frameBtn = document.getElementById("frameBtn")
+
+function darkenColor(hex, amount = 60) {
+  let col = hex.replace("#","")
+  let num = parseInt(col,16)
+  let r = (num >> 16) - amount
+  let g = ((num >> 8) & 0x00FF) - amount
+  let b = (num & 0x0000FF) - amount
+  r = r < 0 ? 0 : r
+  g = g < 0 ? 0 : g
+  b = b < 0 ? 0 : b
+  return "#" + (r<<16 | g<<8 | b).toString(16).padStart(6,"0")
+}
+
+function applyFilters(){
+  const imgs = document.querySelectorAll(".photo-frame img")
+
+  imgs.forEach(img=>{
+    const brightness = `brightness(${brightnessOptions[bIndex].value})`
+    const color = colorOptions[cIndex].css
+    img.style.filter = brightness + " " + color
+  })
+
+  brightnessBtn.textContent = "Brightness: " + brightnessOptions[bIndex].name
+  colorBtn.textContent = "Color: " + colorOptions[cIndex].name
+}
+
+brightnessBtn.onclick = ()=>{
+  bIndex = (bIndex+1) % brightnessOptions.length
+  applyFilters()
+}
+
+colorBtn.onclick = ()=>{
+  cIndex = (cIndex+1) % colorOptions.length
+  applyFilters()
+}
+
+frameBtn.onclick = ()=>{
+  fIndex = (fIndex+1) % frameColors.length
+
+  const mainColor = frameColors[fIndex].inside
+  const darker = darkenColor(mainColor)
+
+  strip.style.background = mainColor
+  strip.style.borderColor = darker
+
+  document.querySelectorAll(".photo-frame").forEach(frame=>{
+    frame.style.borderColor = darker
+  })
+
+  frameBtn.textContent = "Frame Color: " + frameColors[fIndex].name
+}
+
+applyFilters()
+</script>
+
 </body>
 </html>

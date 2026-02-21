@@ -6,114 +6,110 @@
 <title>ClickHub — Photo Booth</title>
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="../assets/Clickhub-logo-1.png">
+
 <style>
-  body { margin: 0; font-family: Arial; }
+body { margin: 0; font-family: Arial; }
 
-  .page-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('../assets/background-booth.png');
-    background-size: cover;
-    background-position: center;
-    z-index: 1;
-  }
+.page-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../assets/background-booth.png');
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+}
 
-  header {
-    position: relative;
-    z-index: 10;
-    width: 100%;
-  }
+header {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+}
 
-  .overlay {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    height: 100%;
-    color: #000000;
-    text-align: center;
-  }
+.overlay {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
 
-  .booth-video {
-    position: absolute;
-    top: 88px;   
-    left: 32%;  
-    transform: translateX(-50%);
-    width: 715px;
-    height: 530px;
-    z-index: 2;
-    background: #000; 
-  }
+.booth-video {
+  position: absolute;
+  top: 88px;   
+  left: 32%;  
+  transform: translateX(-50%);
+  width: 715px;
+  height: 530px;
+  background: #000; 
+}
 
-  #controls {
-    position: absolute;
-    top: 100px;     
-    left: 75%;    
-    transform: translateX(-50%);
-    z-index: 2;
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    align-items: center;
-  }
+#controls {
+  position: absolute;
+  top: 100px;     
+  left: 75%;    
+  transform: translateX(-50%);
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
 
-  #controls select, #controls button {
-    font-size: 16px;
-    padding: 8px 16px;
-    cursor: pointer;
-  }
+#controls select, #controls button {
+  font-size: 16px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
 
-  #countdown { 
-    font-size: 28px; 
-    color: rgb(4, 1, 33);
-    margin-top: 70px;
-    position: absolute;          
-    left: 30%;              
-    transform: translateX(-50%);
-    font-size: 48px;        
-    font-weight: bold;
-    color: white;          
-    text-shadow: 2px 2px 6px black; 
-    z-index: 5;  
-   }
+#countdown { 
+  position: absolute;          
+  left: 30%;              
+  top: 30px;
+  transform: translateX(-50%);
+  font-size: 48px;        
+  font-weight: bold;
+  color: white;          
+  text-shadow: 2px 2px 6px black; 
+  z-index: 5;  
+}
 
-  #frameCount {
-    font-size: 16px; 
-    color: rgb(4, 1, 33); 
-    margin-top: 5px; 
-  }
+#frameCount {
+  position: absolute;
+  top: 65px;
+  left: 75%;
+  transform: translateX(-50%);
+  font-size: 16px; 
+  color: white; 
+}
 
-  #strip {
-    position: absolute;
-    top: 145px;       
-    left: 75%;
-    transform: translateX(-50%);
-    display: grid;
-    gap: 8px;
-    background: rgb(0, 0, 0);
-    padding: 10px;
-    border: 3px solid black;
-    width: fit-content;
-    z-index: 2;
-  }
+#strip {
+  position: absolute;
+  top: 145px;       
+  left: 75%;
+  transform: translateX(-50%);
+  display: grid;
+  gap: 8px;
+  background: black;
+  padding: 10px;
+  border: 3px solid black;
+}
 
-  .photo-frame {
-    width: 90px;  
-    height: 90px;
-    background: #ffffff;
-    border: 2px solid black;
-    overflow: hidden;
-  }
+.photo-frame {
+  width: 90px;  
+  height: 90px;
+  background: #ffffff;
+  border: 2px solid black;
+  overflow: hidden;
+}
 
-  .photo-frame img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+.photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-  .next {
+.next {
   position: fixed;
   bottom: 25px;
   right: 25px;
@@ -126,53 +122,46 @@
   cursor: pointer;
   backdrop-filter: blur(4px);
 }
-
-.next:hover {
-  transform: translateY(-3px);
-  transition: 0.2s;
-}
-
 </style>
 </head>
 
 <body>
-  <div class="page-background"></div>
+<div class="page-background"></div>
 
-  <header>
-    <nav>
-      <a href="home.html">Home</a>
-      <a href="grid.html">Grid</a>
-      <a href="booth.html">Booth</a>
-      <a href="edit.html">Edit</a>
-      <a href="download.html">Download</a>
-      <a href="about.html">About</a>
-    </nav>
-  </header>
+<header>
+<nav>
+<a href="home.html">Home</a>
+<a href="grid.html">Grid</a>
+<a href="booth.html">Booth</a>
+<a href="edit.html">Edit</a>
+<a href="download.html">Download</a>
+<a href="about.html">About</a>
+</nav>
+</header>
 
-  <div class="overlay">
-    <video id="video" autoplay class="booth-video"></video>
+<div class="overlay">
+<video id="video" autoplay class="booth-video"></video>
 
-    <div id="controls">
-      <select id="timer">
-        <option value="3">3s Timer</option>
-        <option value="5">5s Timer</option>
-        <option value="10">10s Timer</option>
-      </select>
-      <button onclick="startBooth()">Start</button>
-      <button onclick="stopBooth()">Stop</button>
-    </div>
+<div id="controls">
+<select id="timer">
+<option value="3">3s Timer</option>
+<option value="5">5s Timer</option>
+<option value="10">10s Timer</option>
+</select>
+<button onclick="startBooth()">Start</button>
+<button onclick="stopBooth()">Stop</button>
+</div>
 
-    <div id="countdown"></div>
-    <div id="frameCount"></div>
+<div id="countdown"></div>
+<div id="frameCount"></div>
+<div id="strip"></div>
 
-    <div id="strip" class="photo-strip"></div>
+<canvas id="canvas" style="display:none;"></canvas>
+</div>
 
-    <canvas id="canvas" style="display:none;"></canvas>
-  </div>
+<button class="next" onclick="window.location.href='edit.html'">Next →</button>
 
-  <button class="next" onclick="window.location.href='edit.html'">Next →</button>
-
-  <script>
+<script>
 const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -196,8 +185,8 @@ function getFramesFromGrid(grid) {
 }
 
 navigator.mediaDevices.getUserMedia({ video: true })
-  .then(stream => video.srcObject = stream)
-  .catch(() => alert("Camera not working"));
+.then(stream => video.srcObject = stream)
+.catch(() => alert("Camera not working"));
 
 function setupStrip() {
   strip.innerHTML = "";
@@ -216,8 +205,10 @@ function setupStrip() {
 
 function startBooth() {
   if (active) return;
-  active = true;
 
+  localStorage.removeItem("capturedPhotos");
+
+  active = true;
   currentFrame = 0;
 
   const timer = parseInt(document.getElementById("timer").value);
@@ -234,9 +225,15 @@ function startBooth() {
     canvas.height = video.videoHeight;
     ctx.drawImage(video, 0, 0);
 
+    const imgData = canvas.toDataURL("image/png");
+
     const img = document.createElement("img");
-    img.src = canvas.toDataURL("image/png");
+    img.src = imgData;
     frames[currentFrame].appendChild(img);
+
+    let saved = JSON.parse(localStorage.getItem("capturedPhotos") || "[]");
+    saved.push(imgData);
+    localStorage.setItem("capturedPhotos", JSON.stringify(saved));
 
     currentFrame++;
     frameCount.textContent = `Frame ${currentFrame} / ${totalFrames}`;
@@ -276,6 +273,7 @@ function startCountdown(seconds, callback) {
     }
   }, 1000);
 }
-  </script>
+</script>
+
 </body>
 </html>
