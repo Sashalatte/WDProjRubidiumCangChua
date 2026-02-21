@@ -32,44 +32,91 @@
     z-index: 2;
     width: 100%;
     height: 100%;
-    color: #fff;
+    color: #000000;
     text-align: center;
   }
 
   .booth-video {
     position: absolute;
-    top: 85px;   
-    left: 32%;   
+    top: 100px;   
+    left: 32%;  
     transform: translateX(-50%);
     width: 715px;
-    height: 512px;
+    height: 530px;
     z-index: 2;
     background: #000; 
   }
 
   #controls {
     position: absolute;
-    top: 300px;     
-    left: 82%;
+    top: 100px;     
+    left: 75%;    
     transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #controls select, #controls button {
+    font-size: 16px;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+
+  #countdown { 
+    font-size: 28px; 
+    color: rgb(4, 1, 33);
+    margin-top: 70px;
+    position: absolute;          
+    left: 30%;              
+    transform: translateX(-50%);
+    font-size: 48px;        
+    font-weight: bold;
+    color: white;          
+    text-shadow: 2px 2px 6px black; 
+    z-index: 5;  
+   }
+
+  #frameCount {
+    font-size: 16px; 
+    color: rgb(4, 1, 33); 
+    margin-top: 5px; 
+  }
+
+  #strip {
+    position: absolute;
+    top: 145px;       
+    left: 75%;
+    transform: translateX(-50%);
+    display: grid;
+    gap: 8px;
+    background: rgb(0, 0, 0);
+    padding: 10px;
+    border: 3px solid black;
+    width: fit-content;
     z-index: 2;
   }
 
-  #controls > * {
-    display: block;
-    margin: 10px 0;
-    font-size: 20px;
+  .photo-frame {
+    width: 100px;  
+    height: 100px;
+    background: #ffffff;
+    border: 2px solid black;
+    overflow: hidden;
   }
 
-  #countdown { font-size: 36px; color: rgb(4, 1, 33); }
-  #frameCount { font-size: 20px; color: rgb(4, 1, 33); }
-  select { font-size: 18px; padding: 5px; }
-  button { padding: 12px 24px; cursor: pointer; }
+  .photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 </style>
 </head>
 
 <body>
-  <div class="page-background" style="background-image: url('../assets/background-booth.png');"></div>
+  <div class="page-background"></div>
 
   <header>
     <nav>
@@ -83,26 +130,26 @@
   </header>
 
   <div class="overlay">
-    <h1>Photo Booth</h1>
-    <p>Get ready to strike a pose!</p>
-
     <video id="video" autoplay class="booth-video"></video>
 
     <div id="controls">
-      <div id="countdown"></div>
-      <div id="frameCount"></div>
       <select id="timer">
         <option value="3">3s Timer</option>
         <option value="5">5s Timer</option>
         <option value="10">10s Timer</option>
       </select>
       <button onclick="startBooth()">Start</button>
-
-      <button id="nextBtn" style="display:none;" onclick="goToDownload()">Next</button>
+      <button onclick="stopBooth()">Stop</button>
     </div>
+
+    <div id="countdown"></div>
+    <div id="frameCount"></div>
+
+    <div id="strip" class="photo-strip"></div>
 
     <canvas id="canvas" style="display:none;"></canvas>
   </div>
+
   <script>
 const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
@@ -115,18 +162,24 @@ let active = false;
 let totalFrames = 0;
 let currentFrame = 0;
 
+const selectedGrid = localStorage.getItem("selectedGrid");
+
+function getFramesFromGrid(grid) {
+  switch(grid) {
+    case "2x2": return {rows:2, cols:2};  
+    case "4x1": return {rows:4, cols:1};   
+    case "4x2": return {rows:4, cols:2};   
+    default: return {rows:2, cols:2};      
+  }
+}
+
 navigator.mediaDevices.getUserMedia({ video: true })
   .then(stream => video.srcObject = stream)
   .catch(() => alert("Camera not working"));
 
-function setupStrip(layout) {
+function setupStrip() {
   strip.innerHTML = "";
-
-  let rows, cols;
-  if (layout === "2x2") { rows = 2; cols = 2; }
-  if (layout === "4x1") { rows = 4; cols = 1; }
-  if (layout === "4x2") { rows = 4; cols = 2; }
-
+  const {rows, cols} = getFramesFromGrid(selectedGrid);
   totalFrames = rows * cols;
 
   strip.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
@@ -146,9 +199,8 @@ function startBooth() {
   currentFrame = 0;
 
   const timer = parseInt(document.getElementById("timer").value);
-  const layout = document.getElementById("layout").value;
 
-  setupStrip(layout);
+  setupStrip();
   frameCount.textContent = `Frame 0 / ${totalFrames}`;
 
   const shoot = () => {
@@ -202,6 +254,6 @@ function startCountdown(seconds, callback) {
     }
   }, 1000);
 }
-</script>
+  </script>
 </body>
 </html>
