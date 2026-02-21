@@ -38,10 +38,10 @@
 
   .booth-video {
     position: absolute;
-    top: 145px;   
+    top: 105px;   
     left: 32%;   
     transform: translateX(-50%);
-    width: 720px;
+    width: 750px;
     height: 512px;
     z-index: 2;
     background: #000; 
@@ -103,5 +103,105 @@
 
     <canvas id="canvas" style="display:none;"></canvas>
   </div>
+  <script>
+const video = document.getElementById("video");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const countdown = document.getElementById("countdown");
+const frameCount = document.getElementById("frameCount");
+const strip = document.getElementById("strip");
+
+let active = false;
+let totalFrames = 0;
+let currentFrame = 0;
+
+navigator.mediaDevices.getUserMedia({ video: true })
+  .then(stream => video.srcObject = stream)
+  .catch(() => alert("Camera not working"));
+
+function setupStrip(layout) {
+  strip.innerHTML = "";
+
+  let rows, cols;
+  if (layout === "2x2") { rows = 2; cols = 2; }
+  if (layout === "4x1") { rows = 4; cols = 1; }
+  if (layout === "4x2") { rows = 4; cols = 2; }
+
+  totalFrames = rows * cols;
+
+  strip.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+  strip.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+  for (let i = 0; i < totalFrames; i++) {
+    const frame = document.createElement("div");
+    frame.className = "photo-frame";
+    strip.appendChild(frame);
+  }
+}
+
+function startBooth() {
+  if (active) return;
+  active = true;
+
+  currentFrame = 0;
+
+  const timer = parseInt(document.getElementById("timer").value);
+  const layout = document.getElementById("layout").value;
+
+  setupStrip(layout);
+  frameCount.textContent = `Frame 0 / ${totalFrames}`;
+
+  const shoot = () => {
+    if (!active) return;
+
+    const frames = document.getElementsByClassName("photo-frame");
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    ctx.drawImage(video, 0, 0);
+
+    const img = document.createElement("img");
+    img.src = canvas.toDataURL("image/png");
+    frames[currentFrame].appendChild(img);
+
+    currentFrame++;
+    frameCount.textContent = `Frame ${currentFrame} / ${totalFrames}`;
+
+    if (currentFrame < totalFrames) {
+      startCountdown(timer, shoot);
+    } else {
+      countdown.textContent = "Done!";
+      active = false;
+    }
+  };
+
+  startCountdown(timer, shoot);
+}
+
+function stopBooth() {
+  active = false;
+  countdown.textContent = "Stopped";
+}
+
+function startCountdown(seconds, callback) {
+  let time = seconds;
+  countdown.textContent = time;
+
+  const interval = setInterval(() => {
+    if (!active) {
+      clearInterval(interval);
+      return;
+    }
+
+    time--;
+    countdown.textContent = time > 0 ? time : "📸";
+
+    if (time === 0) {
+      clearInterval(interval);
+      callback();
+    }
+  }, 1000);
+}
+</script>
 </body>
 </html>
