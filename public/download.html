@@ -117,12 +117,6 @@ header nav a {
 <div id="photobooth-frame"></div>
 <button id="downloadBtn">Download Strip</button>
 </div>
-
-<div class="overlay">
-    <h1 class="title">About ClickHub</h1>
-    <button class="back" onclick="window.location.href='home.html'">← Back to Home</button>
-  </div>
-
 <script>
 const photos = JSON.parse(localStorage.getItem("capturedPhotos") || "[]")
 const stripColor = localStorage.getItem("stripColor") || "rgb(0,0,0)"
