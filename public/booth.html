@@ -38,11 +38,11 @@ header {
 
 .booth-video {
   position: absolute;
-  top: 88px;   
+  top: 100px;   
   left: 32%;  
   transform: translateX(-50%);
   width: 715px;
-  height: 530px;
+  height: 520px;
   background: #000; 
 }
 
@@ -65,7 +65,7 @@ header {
 #countdown { 
   position: absolute;          
   left: 30%;              
-  top: 30px;
+  top: 90px;
   transform: translateX(-50%);
   font-size: 48px;        
   font-weight: bold;
@@ -214,7 +214,6 @@ function startBooth() {
   const timer = parseInt(document.getElementById("timer").value);
 
   setupStrip();
-  frameCount.textContent = `Frame 0 / ${totalFrames}`;
 
   const shoot = () => {
     if (!active) return;
