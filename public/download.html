@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="style.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="../assets/Clickhub-logo-1.png">
 <title>ClickHub — Download</title>
 <style>
 body {
@@ -54,6 +55,12 @@ header nav a {
   border: 3px solid #111;
 }
 
+#photobooth-frame:hover{
+  transform: scale(1.05);
+  transform: rotate(-3deg);
+  transition: 0.5s;
+}
+
 .photo {
   width: 100px;
   height: 80px;
@@ -70,6 +77,23 @@ header nav a {
   color: black;
 }
 
+.back {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  padding: 12px 25px;
+  font-size: 1.2rem;
+  background: rgba(255, 255, 255, 0.35);
+  border: 2px solid black;
+  border-radius: 10px;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+}
+
+.back:hover {
+  transform: translateY(-3px);
+  transition: 0.2s;
+}
 
 </style>
 </head>
@@ -93,6 +117,11 @@ header nav a {
 <div id="photobooth-frame"></div>
 <button id="downloadBtn">Download Strip</button>
 </div>
+
+<div class="overlay">
+    <h1 class="title">About ClickHub</h1>
+    <button class="back" onclick="window.location.href='home.html'">← Back to Home</button>
+  </div>
 
 <script>
 const photos = JSON.parse(localStorage.getItem("capturedPhotos") || "[]")
