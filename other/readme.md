@@ -72,8 +72,8 @@ JavaScript will be used mainly on the “photobooth” page of the website, whic
 
 ### **Final Modification Proposal**
 
-In our website, data will be saved in the local storage when users 
+In our website, data will be saved in the local storage when users use the photobooth and create a photo strip. Data must be saved in the local storage during this step, in order for users to edit and download their photostrip (data) later on in the website. With this data saved in the local storage, users are able to view their photostrip and edit their photostrip through the edit and download pages. Finally, the data saved in the local storage may be erased by deleting the photostrip through the delete button. 
 
-Updated wireframe:
+Updated wireframe: [Click here](https://www.canva.com/design/DAHEfsHVTsY/OqnNoEprDbcYoaLMRIVlbQ/edit?utm_content=DAHEfsHVTsY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
 ---
