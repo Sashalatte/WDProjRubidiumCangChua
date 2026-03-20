@@ -69,4 +69,11 @@ JavaScript will be used mainly on the “photobooth” page of the website, whic
 
 [Click here](https://www.canva.com/design/DAG3JxOpaUg/W-Sf_lRyXX0oO-tzxA3s6g/edit?utm_content=DAG3JxOpaUg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
+
+### **Final Modification Proposal**
+
+In our website, data will be saved in the local storage when users 
+
+Updated wireframe:
+
 ---
