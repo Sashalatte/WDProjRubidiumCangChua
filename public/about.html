@@ -7,21 +7,24 @@
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="../assets/Clickhub-logo-1.png">
 </head>
+
 <style>
-  .overlay {
+.overlay {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 120px;       
-  gap: 10px;
+  gap: 20px;
+  text-align: center;
+  padding: 0 40px;
 }
 
-
-h1.title { 
-  margin-bottom: 450px;
-  padding: 0;
+.overlay p {
+  max-width: 800px;
+  font-size: 1.5rem;
+  line-height: 1.6;
+  margin-bottom: 500px;
 }
-
 
 .back {
   position: fixed;
@@ -41,7 +44,18 @@ h1.title {
   transition: 0.2s;
 }
 
+h1, p {
+  color: rgb(0, 3, 18);
+  margin-right: 130px;
+}
+
+h1 {
+  margin-top: 110px;
+}
+
+
 </style>
+
 <body>
   <div class="page-background" style="background-image: url('../assets/background-about.png');"></div>
 
@@ -58,7 +72,14 @@ h1.title {
 
   <div class="overlay">
     <h1 class="title">About ClickHub</h1>
-    <button class="back" onclick="window.location.href='home.html'">← Back to Home</button>
+    <p>
+      ClickHub is an online photobooth that aims to recreate the feel of an actual
+      photobooth that you could find in malls. Using your webcam, you can create a 
+      series of images, apply filters, and save to your
+      computer or gallery with no account required.
+    </p>
   </div>
+
+  <button class="back" onclick="window.location.href='home.html'">← Back to Home</button>
 </body>
 </html>

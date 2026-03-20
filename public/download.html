@@ -2,39 +2,40 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="style.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="../assets/Clickhub-logo-1.png">
 <title>ClickHub — Download</title>
-
 <style>
-  body {
-    margin: 0;
-    font-family: Arial;
-  }
+body {
+  margin: 0;
+  font-family: Arial;
+}
 
-  .page-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('../assets/background-download.png');
-    background-size: cover;
-    background-position: center;
-    z-index: 0;
-  }
+.page-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../assets/background-download.png');
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
 
-  header {
-    position: relative;
-    z-index: 10;
-    width: 100%;
-  }
+header {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+}
 
-  header nav {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 12px 0;
-  }
+header nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  margin-right: 20px;
+}
 
   header nav a {
     color: white;
@@ -43,43 +44,64 @@
     position: relative;
     top: 25px;
   }
+.main-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 180px;
+  gap: 60px;
+  position: relative;
+  z-index: 5;
+}
 
-  .main-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    margin-top: 180px;
-    gap: 40px;
-    position: relative;
-    z-index: 5;
-  }
+#photobooth-frame {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 3px solid #111;
+}
 
-  #photobooth-frame {
-    display: grid;
-    gap: 8px;
-    width: 130px;
-    padding: 12px;
-    background: black;
-    border: 2px solid #222;
-  }
+#photobooth-frame:hover{
+  transform: scale(1.05);
+  transform: rotate(-3deg);
+  transition: 0.5s;
+}
 
-  .photo {
-    width: 100px;
-    height: 80px;
-    object-fit: cover;
-    display: block;
-    margin: 0 auto;
-  }
+.photo {
+  width: 100px;
+  height: 80px;
+  object-fit: cover;
+  display: block;
+}
 
-  #downloadBtn {
-    padding: 12px 24px;
-    font-size: 16px;
-    cursor: pointer;
-    background: transparent;
-    border: 2px solid black;
-    color: black;
-  }
+#downloadBtn {
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  background: transparent;
+  border: 2px solid black;
+  color: black;
+}
+
+.back {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  padding: 12px 25px;
+  font-size: 1.2rem;
+  background: rgba(255, 255, 255, 0.35);
+  border: 2px solid black;
+  border-radius: 10px;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+}
+
+.back:hover {
+  transform: translateY(-3px);
+  transition: 0.2s;
+}
+
 </style>
 </head>
 
@@ -88,64 +110,127 @@
 <div class="page-background"></div>
 
 <header>
-  <nav>
-    <a href="home.html">Home</a>
-    <a href="grid.html">Grid</a>
-    <a href="booth.html">Booth</a>
-    <a href="edit.html">Edit</a>
-    <a href="download.html">Download</a>
-    <a href="about.html">About</a>
-  </nav>
+<nav>
+<a href="home.html">Home</a>
+<a href="grid.html">Grid</a>
+<a href="booth.html">Booth</a>
+<a href="edit.html">Edit</a>
+<a href="download.html">Download</a>
+<a href="about.html">About</a>
+</nav>
 </header>
 
 <div class="main-container">
-  <div id="photobooth-frame"></div>
-  <button id="downloadBtn">Download Strip</button>
+<div id="photobooth-frame"></div>
+<button id="downloadBtn">Download Strip</button>
 </div>
-
 <script>
-const photos = JSON.parse(localStorage.getItem("boothPhotos") || "[]");
-const frame = document.getElementById("photobooth-frame");
+const photos = JSON.parse(localStorage.getItem("capturedPhotos") || "[]")
+const stripColor = localStorage.getItem("stripColor") || "rgb(0,0,0)"
+const brightnessIndex = parseInt(localStorage.getItem("brightnessIndex") || "2")
+const colorIndex = parseInt(localStorage.getItem("colorIndex") || "3")
+const selectedGrid = localStorage.getItem("selectedGrid") || "2x2"
+
+const brightnessOptions = [
+  {value:0.7},
+  {value:1.3},
+  {value:1}
+]
+
+const colorOptions = [
+  {css:"contrast(115%) saturate(140%) hue-rotate(190deg)"},
+  {css:"sepia(100%)"},
+  {css:"contrast(90%) saturate(80%) sepia(40%)"},
+  {css:""}
+]
+
+function getGridDimensions(grid) {
+  switch(grid) {
+    case "2x2": return {rows:2, cols:2}
+    case "4x1": return {rows:4, cols:1}
+    case "4x2": return {rows:4, cols:2}
+    default: return {rows:2, cols:2}
+  }
+}
+
+const {rows, cols} = getGridDimensions(selectedGrid)
+
+const frame = document.getElementById("photobooth-frame")
+
+frame.style.display = "grid"
+frame.style.gridTemplateRows = `repeat(${rows}, 1fr)`
+frame.style.gridTemplateColumns = `repeat(${cols}, 1fr)`
+frame.style.background = stripColor
+
+function darkenColor(hex, amount = 60) {
+  if(hex.includes("rgb")) return "#111111"
+  let col = hex.replace("#","")
+  let num = parseInt(col,16)
+  let r = (num >> 16) - amount
+  let g = ((num >> 8) & 0x00FF) - amount
+  let b = (num & 0x0000FF) - amount
+  r = r < 0 ? 0 : r
+  g = g < 0 ? 0 : g
+  b = b < 0 ? 0 : b
+  return "#" + (r<<16 | g<<8 | b).toString(16).padStart(6,"0")
+}
+
+frame.style.borderColor = darkenColor(stripColor)
 
 photos.forEach(src => {
-  const img = document.createElement("img");
-  img.src = src;
-  img.className = "photo";
-  frame.appendChild(img);
-});
+  const img = document.createElement("img")
+  img.src = src
+  img.className = "photo"
+  img.style.filter = `brightness(${brightnessOptions[brightnessIndex].value}) ${colorOptions[colorIndex].css}`
+  frame.appendChild(img)
+})
 
 document.getElementById("downloadBtn").addEventListener("click", () => {
-  if (photos.length === 0) return;
+  if (photos.length === 0) return
 
-  const width = 130;
-  const height = photos.length * 80 + (photos.length - 1) * 8 + 24;
+  const cellWidth = 150
+  const cellHeight = 150
+  const gap = 8
+  const padding = 12
 
-  const canvas = document.createElement("canvas");
-  canvas.width = width;
-  canvas.height = height;
-  const ctx = canvas.getContext("2d");
+  const width = cols * cellWidth + (cols - 1) * gap + padding * 2
+  const height = rows * cellHeight + (rows - 1) * gap + padding * 2
 
-  ctx.fillStyle = "black";
-  ctx.fillRect(0, 0, width, height);
+  const canvas = document.createElement("canvas")
+  canvas.width = width
+  canvas.height = height
+  const ctx = canvas.getContext("2d")
 
-  let loaded = 0;
+  ctx.fillStyle = stripColor
+  ctx.fillRect(0, 0, width, height)
 
-  photos.forEach((src, i) => {
-    const img = new Image();
-    img.src = src;
+  let loaded = 0
+
+  photos.forEach((src, index) => {
+    const img = new Image()
+    img.src = src
+
     img.onload = () => {
-      ctx.drawImage(img, (width - 100) / 2, i * (80 + 8) + 12, 100, 80);
-      loaded++;
+      const row = Math.floor(index / cols)
+      const col = index % cols
+
+      const x = padding + col * (cellWidth + gap)
+      const y = padding + row * (cellHeight + gap)
+
+      ctx.filter = `brightness(${brightnessOptions[brightnessIndex].value}) ${colorOptions[colorIndex].css}`
+      ctx.drawImage(img, x, y, cellWidth, cellHeight)
+
+      loaded++
 
       if (loaded === photos.length) {
-        const link = document.createElement("a");
-        link.download = "photobooth_strip.png";
-        link.href = canvas.toDataURL("image/png");
-        link.click();
+        const link = document.createElement("a")
+        link.download = "photobooth_strip.png"
+        link.href = canvas.toDataURL("image/png")
+        link.click()
       }
-    };
-  });
-});
+    }
+  })
+})
 </script>
 
 </body>

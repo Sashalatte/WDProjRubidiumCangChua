@@ -6,102 +6,273 @@
 <title>ClickHub — Photo Booth</title>
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="../assets/Clickhub-logo-1.png">
+
 <style>
-  body { margin: 0; font-family: Arial; }
+body { margin: 0; font-family: Arial; }
 
-  .page-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('../assets/background-booth.png');
-    background-size: cover;
-    background-position: center;
-    z-index: 1;
-  }
+.page-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../assets/background-booth.png');
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+}
 
-  header {
-    position: relative;
-    z-index: 10;
-    width: 100%;
-  }
+header {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+}
 
-  .overlay {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    height: 100%;
-    color: #fff;
-    text-align: center;
-  }
+.overlay {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
 
-  .booth-video {
-    position: absolute;
-    top: 145px;   
-    left: 32%;   
-    transform: translateX(-50%);
-    width: 720px;
-    height: 512px;
-    z-index: 2;
-    background: #000; 
-  }
+.booth-video {
+  position: absolute;
+  top: 100px;   
+  left: 32%;  
+  transform: translateX(-50%);
+  width: 715px;
+  height: 520px;
+  background: #000; 
+}
 
-  #controls {
-    position: absolute;
-    top: 300px;     
-    left: 82%;
-    transform: translateX(-50%);
-    z-index: 2;
-  }
+#controls {
+  position: absolute;
+  top: 100px;     
+  left: 75%;    
+  transform: translateX(-50%);
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
 
-  #controls > * {
-    display: block;
-    margin: 10px 0;
-    font-size: 20px;
-  }
+#controls select, #controls button {
+  font-size: 16px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
 
-  #countdown { font-size: 36px; color: rgb(4, 1, 33); }
-  #frameCount { font-size: 20px; color: rgb(4, 1, 33); }
-  select { font-size: 18px; padding: 5px; }
-  button { padding: 12px 24px; cursor: pointer; }
+#countdown { 
+  position: absolute;          
+  left: 30%;              
+  top: 90px;
+  transform: translateX(-50%);
+  font-size: 48px;        
+  font-weight: bold;
+  color: white;          
+  text-shadow: 2px 2px 6px black; 
+  z-index: 5;  
+}
+
+#frameCount {
+  position: absolute;
+  top: 65px;
+  left: 75%;
+  transform: translateX(-50%);
+  font-size: 16px; 
+  color: white; 
+}
+
+#strip {
+  position: absolute;
+  top: 145px;       
+  left: 75%;
+  transform: translateX(-50%);
+  display: grid;
+  gap: 8px;
+  background: black;
+  padding: 10px;
+  border: 3px solid black;
+}
+
+.photo-frame {
+  width: 90px;  
+  height: 90px;
+  background: #ffffff;
+  border: 2px solid black;
+  overflow: hidden;
+}
+
+.photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.next {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 100;
+  padding: 12px 25px;
+  font-size: 1.2rem;
+  background: rgba(255, 255, 255, 0.35);
+  border: 2px solid black;
+  border-radius: 10px;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+}
 </style>
 </head>
 
 <body>
-  <div class="page-background" style="background-image: url('../assets/background-booth.png');"></div>
+<div class="page-background"></div>
 
-  <header>
-    <nav>
-      <a href="home.html">Home</a>
-      <a href="grid.html">Grid</a>
-      <a href="booth.html">Booth</a>
-      <a href="edit.html">Edit</a>
-      <a href="download.html">Download</a>
-      <a href="about.html">About</a>
-    </nav>
-  </header>
+<header>
+<nav>
+<a href="home.html">Home</a>
+<a href="grid.html">Grid</a>
+<a href="booth.html">Booth</a>
+<a href="edit.html">Edit</a>
+<a href="download.html">Download</a>
+<a href="about.html">About</a>
+</nav>
+</header>
 
-  <div class="overlay">
-    <h1>Photo Booth</h1>
-    <p>Get ready to strike a pose!</p>
+<div class="overlay">
+<video id="video" autoplay class="booth-video"></video>
 
-    <video id="video" autoplay class="booth-video"></video>
+<div id="controls">
+<select id="timer">
+<option value="3">3s Timer</option>
+<option value="5">5s Timer</option>
+<option value="10">10s Timer</option>
+</select>
+<button onclick="startBooth()">Start</button>
+<button onclick="stopBooth()">Stop</button>
+</div>
 
-    <div id="controls">
-      <div id="countdown"></div>
-      <div id="frameCount"></div>
-      <select id="timer">
-        <option value="3">3s Timer</option>
-        <option value="5">5s Timer</option>
-        <option value="10">10s Timer</option>
-      </select>
-      <button onclick="startBooth()">Start</button>
+<div id="countdown"></div>
+<div id="frameCount"></div>
+<div id="strip"></div>
 
-      <button id="nextBtn" style="display:none;" onclick="goToDownload()">Next</button>
-    </div>
+<canvas id="canvas" style="display:none;"></canvas>
+</div>
 
-    <canvas id="canvas" style="display:none;"></canvas>
-  </div>
+<button class="next" onclick="window.location.href='edit.html'">Next →</button>
+
+<script>
+const video = document.getElementById("video");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const countdown = document.getElementById("countdown");
+const frameCount = document.getElementById("frameCount");
+const strip = document.getElementById("strip");
+
+let active = false;
+let totalFrames = 0;
+let currentFrame = 0;
+
+const selectedGrid = localStorage.getItem("selectedGrid");
+
+function getFramesFromGrid(grid) {
+  switch(grid) {
+    case "2x2": return {rows:2, cols:2};  
+    case "4x1": return {rows:4, cols:1};   
+    case "4x2": return {rows:4, cols:2};   
+    default: return {rows:2, cols:2};      
+  }
+}
+
+navigator.mediaDevices.getUserMedia({ video: true })
+.then(stream => video.srcObject = stream)
+.catch(() => alert("Camera not working"));
+
+function setupStrip() {
+  strip.innerHTML = "";
+  const {rows, cols} = getFramesFromGrid(selectedGrid);
+  totalFrames = rows * cols;
+
+  strip.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+  strip.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+  for (let i = 0; i < totalFrames; i++) {
+    const frame = document.createElement("div");
+    frame.className = "photo-frame";
+    strip.appendChild(frame);
+  }
+}
+
+function startBooth() {
+  if (active) return;
+
+  localStorage.removeItem("capturedPhotos");
+
+  active = true;
+  currentFrame = 0;
+
+  const timer = parseInt(document.getElementById("timer").value);
+
+  setupStrip();
+
+  const shoot = () => {
+    if (!active) return;
+
+    const frames = document.getElementsByClassName("photo-frame");
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    ctx.drawImage(video, 0, 0);
+
+    const imgData = canvas.toDataURL("image/png");
+
+    const img = document.createElement("img");
+    img.src = imgData;
+    frames[currentFrame].appendChild(img);
+
+    let saved = JSON.parse(localStorage.getItem("capturedPhotos") || "[]");
+    saved.push(imgData);
+    localStorage.setItem("capturedPhotos", JSON.stringify(saved));
+
+    currentFrame++;
+    frameCount.textContent = `Frame ${currentFrame} / ${totalFrames}`;
+
+    if (currentFrame < totalFrames) {
+      startCountdown(timer, shoot);
+    } else {
+      countdown.textContent = "Done!";
+      active = false;
+    }
+  };
+
+  startCountdown(timer, shoot);
+}
+
+function stopBooth() {
+  active = false;
+  countdown.textContent = "Stopped";
+}
+
+function startCountdown(seconds, callback) {
+  let time = seconds;
+  countdown.textContent = time;
+
+  const interval = setInterval(() => {
+    if (!active) {
+      clearInterval(interval);
+      return;
+    }
+
+    time--;
+    countdown.textContent = time > 0 ? time : "📸";
+
+    if (time === 0) {
+      clearInterval(interval);
+      callback();
+    }
+  }, 1000);
+}
+</script>
+
 </body>
 </html>
