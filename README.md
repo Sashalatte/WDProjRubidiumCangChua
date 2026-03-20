@@ -77,4 +77,3 @@ In our website, data will be saved in the local storage when users use the photo
 
 Updated wireframe: [Click here](https://www.canva.com/design/DAHEfsHVTsY/OqnNoEprDbcYoaLMRIVlbQ/edit?utm_content=DAHEfsHVTsY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
----
