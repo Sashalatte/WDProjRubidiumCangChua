@@ -68,7 +68,7 @@ header nav a {
   display: block;
 }
 
-#downloadBtn {
+#downloadBtn, #deleteBtn {
   padding: 12px 24px;
   font-size: 16px;
   cursor: pointer;
@@ -116,6 +116,7 @@ header nav a {
 <div class="main-container">
 <div id="photobooth-frame"></div>
 <button id="downloadBtn">Download Strip</button>
+<button id="deleteBtn">Delete Photos</button>
 </div>
 <script>
 const photos = JSON.parse(localStorage.getItem("capturedPhotos") || "[]")
@@ -223,6 +224,10 @@ document.getElementById("downloadBtn").addEventListener("click", () => {
       }
     }
   })
+})
+document.getElementById("deleteBtn").addEventListener("click", () => {
+  localStorage.clear()
+  document.getElementById("photobooth-frame").innerHTML = ""
 })
 </script>
 
